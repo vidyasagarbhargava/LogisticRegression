@@ -1,0 +1,43 @@
+---
+title: "Softmax_Scratch"
+output: html_notebook
+---
+
+Vectorized Form
+```{r}
+library(testit)
+softmax <- function(k){
+ testit::assert(is.numeric(k))
+  return(exp(k)/sum(exp(k)))
+}
+```
+
+Using Loops
+```{r}
+softmax_loops <-  function(k){
+  testit::assert(is.numeric(k))
+  sum_exp <- sum(exp(k))
+  output <- rep(0,length(k))
+  for (i in seq_along(k)){
+    output[i] <- exp(k[i])/sum_exp
+  }
+  return(output)
+}
+
+```
+
+Benchmarking
+
+
+```{r}
+library(microbenchmark)
+test <- rnorm(n = 1000) + (rnorm(n = 1000) * 2)
+res <- microbenchmark::microbenchmark(softmax_loops(test), softmax(test), times = 100)
+res
+
+```
+```{r}
+boxplot(res)
+
+```
+ 
